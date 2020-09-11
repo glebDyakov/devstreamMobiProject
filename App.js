@@ -1,13 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet,ScrollView, Text, View } from 'react-native';
 
-export default function App() {
+const navigateScreen=(props,src)=>{
+  props.navigation.navigate("Second",{
+    src:src
+  })
+}
+
+export default async function App() {
+  const listOfImages=await fetch("https://api.unsplash.com//users/jupp/photos?client_id=36c2RU3KTYhSodK4SyqOyYwq_zMFYKyEQPPpIKudA4Y")
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ScrollView style={styles.container}>
+      <Text>List of images</Text>
+      {
+            listOfImages.map(image=>{
+      <Text>Автор: {image.name}</Text>
+      <Text>Автор: {listOfImages.username}</Text>
+      <Image style={styles.myImage} onPress={()=>navigateScreen(props,image.urls.raw)} source={{uri:image.urls.raw}} />
+            
+            })
+      }
+      </ScrollView>
   );
 }
 
@@ -18,4 +32,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  myImage:{
+    width:150,
+    height:150,
+  }
 });
